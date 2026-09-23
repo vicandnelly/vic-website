@@ -22,20 +22,6 @@
   --ease: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    --ink: #f4efe8;
-    --ink-soft: #cabfb2;
-    --cream: #16140f;
-    --cream-2: #1d1a14;
-    --card: #211e18;
-    --accent: #e8804b;
-    --accent-2: #b7a893;
-    --accent-soft: #3a2c22;
-    --line: rgba(244, 239, 232, 0.12);
-  }
-}
-
 :root[data-theme="dark"] {
   --ink: #f4efe8;
   --ink-soft: #cabfb2;
