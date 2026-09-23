@@ -106,14 +106,40 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // --- Contact form (front-end only demo) ---
+  // --- Contact form ---
   const form = document.getElementById('contactForm');
   const note = document.getElementById('formNote');
   if (form) {
-    form.addEventListener('submit', (e) => {
+    form.addEventListener('submit', async (e) => {
       e.preventDefault();
-      note.textContent = "Thanks! This is a template demo — wire this form up to your email or a form service (e.g. Formspree, Netlify Forms) to start receiving messages.";
-      form.reset();
+      const submitBtn = form.querySelector('button[type="submit"]');
+      const originalText = submitBtn.textContent;
+      submitBtn.textContent = 'Sending…';
+      submitBtn.disabled = true;
+      note.textContent = '';
+      note.style.color = '';
+
+      try {
+        const response = await fetch(form.action, {
+          method: 'POST',
+          body: new FormData(form),
+          headers: { 'Accept': 'application/json' }
+        });
+        if (response.ok) {
+          note.textContent = "Thanks! Your message is on its way — I'll get back to you within 48 hours.";
+          form.reset();
+        } else {
+          const data = await response.json().catch(() => ({}));
+          note.textContent = data.errors?.map(err => err.message).join(', ') || 'Something went wrong. Please try again or email me directly.';
+          note.style.color = '#e57373';
+        }
+      } catch (err) {
+        note.textContent = 'Network error. Please check your connection and try again.';
+        note.style.color = '#e57373';
+      } finally {
+        submitBtn.textContent = originalText;
+        submitBtn.disabled = false;
+      }
     });
   }
 
